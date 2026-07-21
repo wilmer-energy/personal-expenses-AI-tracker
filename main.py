@@ -1,8 +1,16 @@
 from fastapi import FastAPI
+from core.db import Base, engine
 
-app = FastAPI(title="Personal Expenses Tracker")
+def create_app() -> FastAPI:
+    app = FastAPI(title="Personal Expenses Tracker")
+
+    Base.metadata.create_all(bind=engine)
+
+    @app.get("/")
+    def hello_world():
+        return "Hello world"
+
+    return app
 
 
-@app.get("/")
-def hello_world():
-    return "Hello world"
+app = create_app()
