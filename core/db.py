@@ -2,6 +2,11 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, Session
 from dotenv import load_dotenv
+from sqlalchemy.orm import Mapped, mapped_column
+from datetime import datetime
+from typing import Optional
+from sqlalchemy import func
+
 load_dotenv()
 
 DB_HOST = os.getenv("DB_HOST")
@@ -19,7 +24,19 @@ SessionLocal = sessionmaker(
 
 
 class Base(DeclarativeBase):
-    pass
+    created_at: Mapped[datetime] = mapped_column(
+        server_default=func.now(),
+        nullable=False
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=True
+    )
+    deleted_at: Mapped[Optional[datetime]] = mapped_column(
+        default=None,
+        nullable=True
+    )
 
 
 def get_db():

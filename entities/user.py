@@ -1,0 +1,17 @@
+from core.db import Base
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Integer, String
+from typing import List, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .expense import Expense
+
+
+class User(Base):
+    __tablename__ = "users"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    email: Mapped[str] = mapped_column(String(100), unique=True, index=True)
+    password: Mapped[str] = mapped_column(String(100), nullable=False)
+
+    expenses: Mapped[List["Expense"]] = relationship(back_populates="user")
