@@ -11,4 +11,3 @@ class CreateExpense(BaseModel):
     amount: Decimal
     made_at: datetime
     category: ExpenseCategory
-    user_id: int

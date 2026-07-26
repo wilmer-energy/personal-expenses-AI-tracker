@@ -41,3 +41,11 @@ class UserRepository:
         results = self.db.execute(query).mappings().all()
 
         return [UserResponse.model_validate(row) for row in results]
+    
+    def get_by_email(self, email: str) -> UserModel | None:
+        query = select(UserModel).where(
+            UserModel.email == email,
+            UserModel.deleted_at.is_(None),
+        )
+
+        return self.db.scalar(query)

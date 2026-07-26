@@ -7,12 +7,13 @@ from routers.repositories.expense import ExpenseRepository
 
 def execute(
     expense_id: int,
+    user_id: int,
     dto: UpdateExpense,
     db: Session,
 ):
     repository = ExpenseRepository(db)
 
-    expense = repository.get_by_id(expense_id)
+    expense = repository.get_by_id(expense_id, user_id)
 
     if expense is None:
         raise HTTPException(

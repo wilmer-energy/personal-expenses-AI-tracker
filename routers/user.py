@@ -5,13 +5,21 @@ from sqlalchemy.orm import Session
 
 from core.db import get_db
 from routers.dtos.create_user import CreateUser
+from routers.dtos.login import LoginDto
 from routers.use_cases.create_user import execute
 from routers.use_cases.get_user_by_id import execute as get_user_by_id_use_case
 from routers.use_cases.get_users import execute as get_users_use_case
+from routers.use_cases.login import execute as login_use_case
 
 router = APIRouter(prefix="/user")
 
 DbSession = Annotated[Session, Depends(get_db)]
+
+
+@router.post("/login")
+def login(dto: LoginDto, db: DbSession):
+    return login_use_case(dto, db)
+
 
 @router.post("")
 def create_user(dto: CreateUser, db: DbSession):

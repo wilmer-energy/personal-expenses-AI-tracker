@@ -1,7 +1,9 @@
-from core.db import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Integer, String
-from typing import List, TYPE_CHECKING
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from core.db import Base
 
 if TYPE_CHECKING:
     from .expense import Expense
@@ -14,4 +16,4 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(100), unique=True, index=True)
     password: Mapped[str] = mapped_column(String(100), nullable=False)
 
-    expenses: Mapped[List["Expense"]] = relationship(back_populates="user")
+    expenses: Mapped[list["Expense"]] = relationship(back_populates="user")

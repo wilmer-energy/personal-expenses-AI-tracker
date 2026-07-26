@@ -76,11 +76,12 @@ class ExpenseRepository:
         return True
 
     
-    def get_by_id(self, expense_id: int) -> ExpenseModel | None:
+    def get_by_id(self, expense_id: int, user_id: int) -> ExpenseModel | None:
         query = (
             select(ExpenseModel)
             .where(
                 ExpenseModel.id == expense_id,
+                ExpenseModel.user_id == user_id,
                 ExpenseModel.deleted_at.is_(None),
             )
         )
