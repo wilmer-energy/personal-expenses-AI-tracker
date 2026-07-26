@@ -1,11 +1,13 @@
-from core.db import Base
-from sqlalchemy import Integer, String, Numeric, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from decimal import Decimal
-from typing import Optional, TYPE_CHECKING
 import enum
-from sqlalchemy import Enum as SQLEnum
 from datetime import datetime
+from decimal import Decimal
+from typing import TYPE_CHECKING, Optional
+
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import ForeignKey, Integer, Numeric, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from core.db import Base
 
 if TYPE_CHECKING:
     from .user import User

@@ -1,11 +1,10 @@
 import os
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, DeclarativeBase, Session
-from dotenv import load_dotenv
-from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 from typing import Optional
-from sqlalchemy import func
+
+from dotenv import load_dotenv
+from sqlalchemy import create_engine, func
+from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 load_dotenv()
 
