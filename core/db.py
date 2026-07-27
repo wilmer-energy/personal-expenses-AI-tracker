@@ -1,9 +1,8 @@
 import os
 from datetime import datetime
-from typing import Optional
 
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, func
+from sqlalchemy import DateTime, create_engine, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 load_dotenv()
@@ -24,17 +23,20 @@ SessionLocal = sessionmaker(
 
 class Base(DeclarativeBase):
     created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
         server_default=func.now(),
-        nullable=False
+        nullable=False,
     )
-    updated_at: Mapped[Optional[datetime]] = mapped_column(
+
+    updated_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
-        nullable=True
     )
-    deleted_at: Mapped[Optional[datetime]] = mapped_column(
-        default=None,
-        nullable=True
+
+    deleted_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
     )
 
 

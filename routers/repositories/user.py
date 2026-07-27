@@ -30,18 +30,18 @@ class UserRepository:
         if row:
             return UserResponse.model_validate(row)
         return None
-    
+
     def get_all(self) -> list[UserResponse]:
         query = select(
             UserModel.id,
             UserModel.name,
             UserModel.email
         ).where(UserModel.deleted_at.is_(None))
-        
+
         results = self.db.execute(query).mappings().all()
 
         return [UserResponse.model_validate(row) for row in results]
-    
+
     def get_by_email(self, email: str) -> UserModel | None:
         query = select(UserModel).where(
             UserModel.email == email,
@@ -49,3 +49,13 @@ class UserRepository:
         )
 
         return self.db.scalar(query)
+
+    def update_password(
+        self,
+        user: UserModel,
+        hashed_password: str,
+    ):
+        user.password = hashed_password
+
+        self.db.commit()
+        self.db.refresh(user)
