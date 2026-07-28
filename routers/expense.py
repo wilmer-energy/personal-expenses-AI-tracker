@@ -1,6 +1,7 @@
+from datetime import date
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from core.db import get_db
@@ -34,10 +35,23 @@ def create_expense(
 
 @router.get("/")
 def get_expenses_by_user(
-        current_user: CurrentUserDependency,
-        db: DbSession
+    current_user: CurrentUserDependency,
+    db: DbSession,
+    start_date: Annotated[
+        date | None,
+        Query(description="Start date (YYYY-MM-DD)")
+    ] = None,
+    end_date: Annotated[
+        date | None,
+        Query(description="End date (YYYY-MM-DD)")
+    ] = None,
 ):
-    return get_expenses_by_user_use_case(current_user.id, db)
+    return get_expenses_by_user_use_case(
+        user_id=current_user.id,
+        start_date=start_date,
+        end_date=end_date,
+        db=db,
+    )
 
 
 @router.put("/{id}")

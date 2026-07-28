@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import Any
 
 from sqlalchemy import select
@@ -19,15 +19,32 @@ class ExpenseRepository:
         self.db.refresh(expense)
         return expense
 
-    def get_by_user(self, user_id: int) -> list[ExpenseModel]:
+    def get_by_user(
+        self,
+        user_id: int,
+        start_date: date | None = None,
+        end_date: date | None = None,
+    ) -> list[ExpenseModel]:
+
         query = (
             select(ExpenseModel)
             .where(
                 ExpenseModel.user_id == user_id,
                 ExpenseModel.deleted_at.is_(None),
             )
-            .order_by(ExpenseModel.made_at.desc())
         )
+
+        if start_date is not None:
+            query = query.where(
+                ExpenseModel.made_at >= start_date
+            )
+
+        if end_date is not None:
+            query = query.where(
+                ExpenseModel.made_at <= end_date
+            )
+
+        query = query.order_by(ExpenseModel.made_at.desc())
 
         return list(self.db.scalars(query).all())
 
